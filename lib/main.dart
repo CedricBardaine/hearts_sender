@@ -35,6 +35,8 @@ class MyApp extends StatelessWidget {
           800: const Color(0xFF669C5E),
           900: const Color(0xFF669C5E),
         }),
+        primaryColor: Color(0xFF669C5E),
+        accentColor: Color(0xFFE8A90C),
 
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
