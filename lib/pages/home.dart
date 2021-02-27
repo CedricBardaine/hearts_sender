@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hearts_sender/colors.dart';
+import 'package:hearts_sender/pages/settings.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -21,7 +23,8 @@ class Home extends StatelessWidget {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         if (states.contains(MaterialState.pressed))
-                          return Theme.of(context).colorScheme.secondary;
+                          // return Theme.of(context).colorScheme.secondary; // this way uses the defined property of ThemData of the MaterialApp()
+                          return Color(CustomColors.SECONDARY);
                         return Theme.of(context)
                             .colorScheme
                             .primary; // Use the component's default.
@@ -54,6 +57,17 @@ class Home extends StatelessWidget {
             ),
             // TODO: add ❤ chart
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Settings()));
+        },
+        tooltip: "Mes paramètres",
+        child: Icon(
+          Icons.settings,
+          color: Color(CustomColors.TERTIARY),
         ),
       ),
     );
