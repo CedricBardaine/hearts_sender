@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hearts_sender/pages/home/home.dart';
+import 'package:hearts_sender/pages/home.dart';
 
 void main() {
   runApp(MyApp());
