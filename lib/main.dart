@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hearts_sender/colors.dart';
 import 'package:hearts_sender/pages/home.dart';
 
 void main() {
@@ -35,8 +36,8 @@ class MyApp extends StatelessWidget {
           800: const Color(0xFF669C5E),
           900: const Color(0xFF669C5E),
         }),
-        primaryColor: Color(0xFF669C5E),
-        accentColor: Color(0xFFE8A90C),
+        primaryColor: Color(CustomColors.PRIMARY),
+        accentColor: Color(CustomColors.SECONDARY),
 
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
