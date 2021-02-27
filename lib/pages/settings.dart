@@ -11,6 +11,21 @@ class Settings extends StatelessWidget {
               Navigator.pop(context);
             }),
       ),
+      body: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Mon identifiant : " + "###"),
+                Text("L'identifiant de la personne liée : " + "###"),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }
