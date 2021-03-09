@@ -1,4 +1,4 @@
-package com.example.hearts_sender
+package cedbdb.hearts_sender
 
 import io.flutter.embedding.android.FlutterActivity
 

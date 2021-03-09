@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "579599184361",
+    "project_id": "hearts-sender",
+    "storage_bucket": "hearts-sender.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579599184361:android:67eeb8cd9d530a13a01b78",
+        "android_client_info": {
+          "package_name": "cedbdb.hearts_sender"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "579599184361-qpdvosnocbgjr0370v3k10dokv1gcc5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8lGUka66jIaYUQShZvoVEvqkbfk0OeUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "579599184361-qpdvosnocbgjr0370v3k10dokv1gcc5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
