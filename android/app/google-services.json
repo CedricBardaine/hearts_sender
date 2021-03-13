@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "579599184361-d82l64tk3977esl9l9hog1qq2d7igej3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cedbdb.hearts_sender",
+            "certificate_hash": "93ebb731a67b0a29aa3172cb7bf03843bf368db7"
+          }
+        },
+        {
           "client_id": "579599184361-qpdvosnocbgjr0370v3k10dokv1gcc5d.apps.googleusercontent.com",
           "client_type": 3
         }
