@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hearts_sender/colors.dart';
@@ -13,16 +14,20 @@ class _SettingsState extends State<Settings> {
   bool _connected = false;
   String _userId = "";
 
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
 
-    FirebaseAuth.instance.authStateChanges().listen((user) {
+    auth.authStateChanges().listen((user) {
       setState(() {
         if (user == null)
           _connected = false;
-        else
+        else {
           _connected = true;
+          _userId = auth.currentUser!.uid;
+        }
       });
     });
   }
@@ -61,7 +66,11 @@ class _SettingsState extends State<Settings> {
                           backgroundColor: Color(CustomColors.SECONDARY),
                         ));
                       },
-                      child: Text("Mon identifiant : " + _userId),
+                      child: Text(
+                        "Mon identifiant : " + _userId,
+                        style: TextStyle(
+                            color: _connected ? Colors.black : Colors.grey),
+                      ),
                     ),
                     Container(
                       height: 16.0,
@@ -71,6 +80,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ],
             ),
+            TextField(),
             Expanded(child: connectionBtn())
           ],
         ),
