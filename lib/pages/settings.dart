@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hearts_sender/colors.dart';
+import 'package:flutter/services.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -11,6 +11,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool _connected = false;
+  String _userId = "";
 
   @override
   void initState() {
@@ -46,8 +47,26 @@ class _SettingsState extends State<Settings> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Mon identifiant : " + "###"),
-                    Text("L'identifiant de la personne liée : " + "###"),
+                    GestureDetector(
+                      onTap: () {
+                        // Copy id to clipboard
+                        Clipboard.setData(ClipboardData(text: _userId));
+
+                        // And show notification
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text("Identifiant copié.",
+                              style: TextStyle(
+                                  color: Color(CustomColors.TERTIARY))),
+                          duration: const Duration(seconds: 3),
+                          backgroundColor: Color(CustomColors.SECONDARY),
+                        ));
+                      },
+                      child: Text("Mon identifiant : " + _userId),
+                    ),
+                    Container(
+                      height: 16.0,
+                    ),
+                    Text("L'identifiant de la personne liée : " + ""),
                   ],
                 ),
               ],
