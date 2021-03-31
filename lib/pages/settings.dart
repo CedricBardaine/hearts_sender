@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hearts_sender/colors.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hearts_sender/add_user.dart';
+
+import 'package:hearts_sender/colors.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -14,6 +20,8 @@ class _SettingsState extends State<Settings> {
   bool _connected = false;
   String _userId = "";
 
+  late CollectionReference _allUsers;
+
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -22,11 +30,16 @@ class _SettingsState extends State<Settings> {
 
     auth.authStateChanges().listen((user) {
       setState(() {
-        if (user == null)
+        if (user == null) {
           _connected = false;
-        else {
+          log("PAS CONNECCCCTEEEE");
+        } else {
           _connected = true;
           _userId = auth.currentUser!.uid;
+
+          CollectionReference _allUsers =
+              FirebaseFirestore.instance.collection('users');
+          log("LOOOOOG : " + _allUsers.toString());
         }
       });
     });
@@ -81,7 +94,8 @@ class _SettingsState extends State<Settings> {
               ],
             ),
             TextField(),
-            Expanded(child: connectionBtn())
+            Expanded(child: connectionBtn()),
+            AddUser("fullName", "company", 21),
           ],
         ),
       ),
@@ -98,7 +112,9 @@ class _SettingsState extends State<Settings> {
               icon: Icon(Icons.login),
               color: Color(CustomColors.PRIMARY),
               onPressed: () {
+                log("CLICK - 1 ");
                 signInWithGoogle();
+                log("CLICK - 2 ");
               })
         ],
       );
