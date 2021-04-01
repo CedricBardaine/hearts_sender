@@ -38,7 +38,7 @@ class _SettingsState extends State<Settings> {
           _userId = auth.currentUser!.uid;
 
           CollectionReference _allUsers =
-              FirebaseFirestore.instance.collection('users');
+              FirebaseFirestore.instance.collection('Users');
           log("LOOOOOG : " + _allUsers.toString());
         }
       });
