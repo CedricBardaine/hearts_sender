@@ -19,6 +19,9 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   bool _connected = false;
   String _userId = "";
+  String _name = "";
+
+  final _tfController = TextEditingController();
 
   late CollectionReference _allUsers;
 
@@ -28,6 +31,7 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
 
+    // TODO: clean this code.
     auth.authStateChanges().listen((user) {
       setState(() {
         if (user == null) {
@@ -37,9 +41,32 @@ class _SettingsState extends State<Settings> {
           _connected = true;
           _userId = auth.currentUser!.uid;
 
-          CollectionReference _allUsers =
-              FirebaseFirestore.instance.collection('Users');
-          log("LOOOOOG : " + _allUsers.toString());
+          CollectionReference allUsers =
+              FirebaseFirestore.instance.collection('User');
+
+          allUsers.doc(_userId).get().then((DocumentSnapshot documentSnapshot) {
+            if (documentSnapshot.exists) {
+              print('Document data: ${documentSnapshot.data()}');
+              setState(() {
+                _name = documentSnapshot.data()!["name"];
+                _tfController.text = documentSnapshot.data()!["linked_to"];
+              });
+              log(documentSnapshot.data()!["name"]);
+            } else {
+              print('Document does not exist on the database');
+
+              //  AUTO-GENERATED ID
+              // allUsers
+              //     .add({"name": "default name", "heart_color": "light-red"});
+
+              allUsers
+                  .doc(_userId)
+                  .set({"name": "default name", "heart_color": "light-red"})
+                  .then((value) => print("User added ! "))
+                  .catchError(
+                      (onError) => print("Failed to add user : $onError"));
+            }
+          });
         }
       });
     });
@@ -88,12 +115,31 @@ class _SettingsState extends State<Settings> {
                     Container(
                       height: 16.0,
                     ),
+                    Text(
+                      "Mon nom : " + _name,
+                      style: TextStyle(
+                          color: _connected ? Colors.black : Colors.grey),
+                    ),
+                    Container(
+                      height: 16.0,
+                    ),
                     Text("L'identifiant de la personne liée : " + ""),
                   ],
                 ),
               ],
             ),
-            TextField(),
+            TextField(
+              controller: _tfController,
+              onSubmitted: (value) {
+                FirebaseFirestore.instance
+                    .collection('User')
+                    .doc(_userId)
+                    .update({"linked_to": value})
+                    .then((value) => print("User linked ! : "))
+                    .catchError((onError) =>
+                        print("Failed to set linked user : $onError"));
+              },
+            ),
             Expanded(child: connectionBtn()),
             AddUser("fullName", "company", 21),
           ],
@@ -112,9 +158,7 @@ class _SettingsState extends State<Settings> {
               icon: Icon(Icons.login),
               color: Color(CustomColors.PRIMARY),
               onPressed: () {
-                log("CLICK - 1 ");
                 signInWithGoogle();
-                log("CLICK - 2 ");
               })
         ],
       );
