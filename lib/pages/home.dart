@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hearts_sender/colors.dart';
-import 'package:hearts_sender/pages/settings.dart';
+import 'package:hearts_sender/pages/settings.dart' as settingsPage;
 
 class Home extends StatefulWidget {
   @override
@@ -41,6 +42,7 @@ class _HomeState extends State<Home> {
                       TextButton(
                         onPressed: () {
                           print("ouille");
+                          sendAHeart();
                         },
                         style: ButtonStyle(
                           backgroundColor:
@@ -86,8 +88,8 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Settings()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => settingsPage.Settings()));
         },
         tooltip: "Mes paramètres",
         child: Icon(
@@ -96,5 +98,16 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  void sendAHeart() {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+
+    DocumentReference userData =
+        FirebaseFirestore.instance.collection('User').doc(userId);
+    CollectionReference userHearts = userData.collection('hearts');
+
+    userHearts.add(
+        {"color": "green", "date": new DateTime.now().millisecondsSinceEpoch});
   }
 }
