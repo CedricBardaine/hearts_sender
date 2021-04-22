@@ -1,7 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hearts_sender/add_user.dart';
+
 import 'package:hearts_sender/colors.dart';
 
 class Settings extends StatefulWidget {
@@ -11,17 +18,55 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool _connected = false;
+  String _userId = "";
+  String _name = "";
+
+  final _tfController = TextEditingController();
+
+  late CollectionReference _allUsers;
+
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
 
-    FirebaseAuth.instance.authStateChanges().listen((user) {
+    auth.authStateChanges().listen((user) {
       setState(() {
-        if (user == null)
+        if (user == null) {
           _connected = false;
-        else
+          log("Not logged.");
+        } else {
           _connected = true;
+          _userId = auth.currentUser!.uid;
+
+          CollectionReference allUsers =
+              FirebaseFirestore.instance.collection('User');
+
+          allUsers.doc(_userId).get().then((DocumentSnapshot documentSnapshot) {
+            if (documentSnapshot.exists) {
+              print('Document data: ${documentSnapshot.data()}');
+              setState(() {
+                _name = documentSnapshot.data()!["name"];
+                _tfController.text = documentSnapshot.data()!["linked_to"];
+              });
+              // log(documentSnapshot.data()!["name"]);
+            } else {
+              print('Document does not already exist in the database');
+
+              //  AUTO-GENERATED ID
+              // allUsers
+              //     .add({"name": "default name", "heart_color": "light-red"});
+
+              allUsers
+                  .doc(_userId)
+                  .set({"name": "default name", "heart_color": "light-red"})
+                  .then((value) => print("User added ! "))
+                  .catchError(
+                      (onError) => print("Failed to add user : $onError"));
+            }
+          });
+        }
       });
     });
   }
@@ -46,13 +91,56 @@ class _SettingsState extends State<Settings> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Mon identifiant : " + "###"),
-                    Text("L'identifiant de la personne liée : " + "###"),
+                    GestureDetector(
+                      onTap: () {
+                        // Copy id to clipboard
+                        Clipboard.setData(ClipboardData(text: _userId));
+
+                        // And show notification
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text("Identifiant copié.",
+                              style: TextStyle(
+                                  color: Color(CustomColors.TERTIARY))),
+                          duration: const Duration(seconds: 3),
+                          backgroundColor: Color(CustomColors.SECONDARY),
+                        ));
+                      },
+                      child: Text(
+                        "Mon identifiant : " + _userId,
+                        style: TextStyle(
+                            color: _connected ? Colors.black : Colors.grey),
+                      ),
+                    ),
+                    Container(
+                      height: 16.0,
+                    ),
+                    Text(
+                      "Mon nom : " + _name,
+                      style: TextStyle(
+                          color: _connected ? Colors.black : Colors.grey),
+                    ),
+                    Container(
+                      height: 16.0,
+                    ),
+                    Text("L'identifiant de la personne liée : " + ""),
                   ],
                 ),
               ],
             ),
-            Expanded(child: connectionBtn())
+            TextField(
+              controller: _tfController,
+              onSubmitted: (value) {
+                FirebaseFirestore.instance
+                    .collection('User')
+                    .doc(_userId)
+                    .update({"linked_to": value})
+                    .then((value) => print("User linked ! : "))
+                    .catchError((onError) =>
+                        print("Failed to set linked user : $onError"));
+              },
+            ),
+            Expanded(child: connectionBtn()),
+            AddUser("fullName", "company", 21),
           ],
         ),
       ),
