@@ -1,0 +1,36 @@
+{
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            80
+        ],
+        "editor.selectionHighlight": false,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": false
+    },
+    // @see https://code.visualstudio.com/api/references/theme-color 
+    "workbench.colorCustomizations": {
+        /*
+        primary : #669C5E 
+        secondary : #E8A90C 
+        background : 2C3E50
+        primary-light : B3DABA
+        secondary-light : #F6C957
+        */
+        "activityBar.background": "#2c3e50",
+        "activityBar.foreground": "#E8A90C",
+        //
+        "sideBar.background": "#2C3E50",
+        "sideBarTitle.foreground": "#E8A90C",
+        //
+        "button.background": "#f6c957",
+        "button.foreground": "#2C3E50",
+        //
+        "breadcrumb.background": "#2C3E50",
+        //
+        "statusBar.background": "#669C5E",
+    }
+}
