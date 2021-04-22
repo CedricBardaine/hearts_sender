@@ -31,12 +31,11 @@ class _SettingsState extends State<Settings> {
   void initState() {
     super.initState();
 
-    // TODO: clean this code.
     auth.authStateChanges().listen((user) {
       setState(() {
         if (user == null) {
           _connected = false;
-          log("PAS CONNECCCCTEEEE");
+          log("Not logged.");
         } else {
           _connected = true;
           _userId = auth.currentUser!.uid;
@@ -51,9 +50,9 @@ class _SettingsState extends State<Settings> {
                 _name = documentSnapshot.data()!["name"];
                 _tfController.text = documentSnapshot.data()!["linked_to"];
               });
-              log(documentSnapshot.data()!["name"]);
+              // log(documentSnapshot.data()!["name"]);
             } else {
-              print('Document does not exist on the database');
+              print('Document does not already exist in the database');
 
               //  AUTO-GENERATED ID
               // allUsers
