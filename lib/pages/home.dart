@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:hearts_sender/colors.dart';
 import 'package:hearts_sender/pages/settings.dart' as settingsPage;
 
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:hearts_sender/pages/subscriber_chart.dart';
+
+import '../subscriber_series.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -11,6 +16,49 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late bool _connected = false;
+
+  final List<SubscriberSeries> data = [
+    SubscriberSeries(
+      year: "2008",
+      subscribers: 10000000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      year: "2009",
+      subscribers: 11000000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      year: "2010",
+      subscribers: 12000000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      year: "2011",
+      subscribers: 10000000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      year: "2012",
+      subscribers: 8500000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      year: "2013",
+      subscribers: 7700000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      year: "2014",
+      subscribers: 7600000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.blue),
+    ),
+    SubscriberSeries(
+      year: "2015",
+      subscribers: 5500000,
+      barColor: charts.ColorUtil.fromDartColor(Colors.red),
+    ),
+  ];
 
   @override
   void initState() {
@@ -82,6 +130,12 @@ class _HomeState extends State<Home> {
                     height: 8.0,
                   ),
                   // TODO: add ❤ chart
+                  //
+                  //
+                  //
+                  SubscriberChart(
+                    data: data,
+                  ),
                 ],
               )
             : Center(child: Text("Connectez vous avant tout 😁")),
