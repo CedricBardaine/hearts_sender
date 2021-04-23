@@ -37,8 +37,6 @@ class _HomeState extends State<Home> {
         getHearts();
       });
     });
-
-    getHearts();
   }
 
   @override
@@ -133,6 +131,9 @@ class _HomeState extends State<Home> {
   void getHearts() {
     DateTime aWeekAgo = new DateTime.now().subtract(new Duration(days: 7));
 
+    /// Current week day number.
+    int cWDN = new DateTime.now().weekday;
+
     _chartData = [];
 
     String userId = FirebaseAuth.instance.currentUser!.uid;
@@ -176,39 +177,39 @@ class _HomeState extends State<Home> {
             // fill chart with database values
 
             _chartData.add(HeartsADay(
-              day: "lun.",
-              hearts: occurencePerDay[0],
+              day: dayNameFromIndex(validWeekDayNumber(cWDN - 6)),
+              hearts: occurencePerDay[validWeekDayNumber(cWDN - 6) - 1],
               barColor: charts.ColorUtil.fromDartColor(Colors.redAccent),
             ));
             _chartData.add(HeartsADay(
-              day: "mar.",
-              hearts: occurencePerDay[1],
+              day: dayNameFromIndex(validWeekDayNumber(cWDN - 5)),
+              hearts: occurencePerDay[validWeekDayNumber(cWDN - 5) - 1],
               barColor: charts.ColorUtil.fromDartColor(Colors.redAccent),
             ));
             _chartData.add(HeartsADay(
-              day: "mer.",
-              hearts: occurencePerDay[2],
+              day: dayNameFromIndex(validWeekDayNumber(cWDN - 4)),
+              hearts: occurencePerDay[validWeekDayNumber(cWDN - 4) - 1],
               barColor: charts.ColorUtil.fromDartColor(Colors.redAccent),
             ));
             _chartData.add(HeartsADay(
-              day: "jeu.",
-              hearts: occurencePerDay[3],
+              day: dayNameFromIndex(validWeekDayNumber(cWDN - 3)),
+              hearts: occurencePerDay[validWeekDayNumber(cWDN - 3) - 1],
               barColor: charts.ColorUtil.fromDartColor(Colors.redAccent),
             ));
             _chartData.add(HeartsADay(
-              day: "ven.",
-              hearts: occurencePerDay[4],
+              day: dayNameFromIndex(validWeekDayNumber(cWDN - 2)),
+              hearts: occurencePerDay[validWeekDayNumber(cWDN - 2) - 1],
               barColor: charts.ColorUtil.fromDartColor(Colors.redAccent),
             ));
             _chartData.add(HeartsADay(
-              day: "sam.",
-              hearts: occurencePerDay[5],
+              day: dayNameFromIndex(validWeekDayNumber(cWDN - 1)),
+              hearts: occurencePerDay[validWeekDayNumber(cWDN - 1) - 1],
               barColor: charts.ColorUtil.fromDartColor(Colors.redAccent),
             ));
             _chartData.add(HeartsADay(
-              day: "dim.",
-              hearts: occurencePerDay[6],
-              barColor: charts.ColorUtil.fromDartColor(Colors.redAccent),
+              day: dayNameFromIndex((cWDN)),
+              hearts: occurencePerDay[(cWDN) - 1],
+              barColor: charts.ColorUtil.fromDartColor(Colors.red),
             ));
 
             //
@@ -226,5 +227,36 @@ class _HomeState extends State<Home> {
         });
       }
     });
+  }
+
+  String dayNameFromIndex(int index) {
+    switch (index) {
+      case 1:
+        return "lun.";
+      case 2:
+        return "mar.";
+      case 3:
+        return "mer.";
+      case 4:
+        return "jeu.";
+      case 5:
+        return "ven.";
+      case 6:
+        return "sam.";
+      case 7:
+        return "dim.";
+      default:
+        return "ERR_" + index.toString();
+    }
+  }
+
+  /// Doesn't tak in consideration index  >14  nor  <-6
+  int validWeekDayNumber(int index) {
+    if (index < 1)
+      return index + 7;
+    else if (index > 7)
+      return index - 7;
+    else
+      return index;
   }
 }
