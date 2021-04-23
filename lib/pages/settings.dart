@@ -19,8 +19,10 @@ class _SettingsState extends State<Settings> {
   bool _connected = false;
   String _userId = "";
   String _name = "";
+  String _nameLinked = "";
 
-  final _tfController = TextEditingController();
+  final _tfController_idLinked = TextEditingController();
+  final _tfController_name = TextEditingController();
 
   late CollectionReference _allUsers;
 
@@ -47,7 +49,23 @@ class _SettingsState extends State<Settings> {
               print('Document data: ${documentSnapshot.data()}');
               setState(() {
                 _name = documentSnapshot.data()!["name"];
-                _tfController.text = documentSnapshot.data()!["linked_to"];
+
+                _tfController_idLinked.text =
+                    documentSnapshot.data()!["linked_to"];
+                _tfController_name.text = documentSnapshot.data()!["name"];
+
+                //
+                // get linked user name
+                allUsers
+                    .doc(documentSnapshot.data()!["linked_to"])
+                    .get()
+                    .then((DocumentSnapshot documentSnapshot) {
+                  if (documentSnapshot.exists) {
+                    setState(() {
+                      _nameLinked = documentSnapshot.data()!["name"];
+                    });
+                  }
+                });
               });
               // log(documentSnapshot.data()!["name"]);
             } else {
@@ -113,20 +131,42 @@ class _SettingsState extends State<Settings> {
                       height: 16.0,
                     ),
                     Text(
-                      "Mon nom : " + _name,
+                      "Mon nom : ",
                       style: TextStyle(
                           color: _connected ? Colors.black : Colors.grey),
                     ),
-                    Container(
-                      height: 16.0,
+                    SizedBox(
+                      height: 32.0,
+                      width: 200.0,
+                      child: TextField(
+                        enabled: _connected,
+                        controller: _tfController_name,
+                        onSubmitted: (value) {
+                          FirebaseFirestore.instance
+                              .collection('User')
+                              .doc(_userId)
+                              .update({"name": value})
+                              .then((value) => print("Name updated ! : "))
+                              .catchError((onError) => print(
+                                  "Failed to set linked user : $onError"));
+                        },
+                      ),
                     ),
-                    Text("L'identifiant de la personne liée : " + ""),
+                    Container(
+                      height: 48.0,
+                    ),
+                    Text(
+                      "L'identifiant de la personne liée : " + "",
+                      style: TextStyle(
+                          color: _connected ? Colors.black : Colors.grey),
+                    ),
                   ],
                 ),
               ],
             ),
             TextField(
-              controller: _tfController,
+              enabled: _connected,
+              controller: _tfController_idLinked,
               onSubmitted: (value) {
                 FirebaseFirestore.instance
                     .collection('User')
@@ -136,6 +176,16 @@ class _SettingsState extends State<Settings> {
                     .catchError((onError) =>
                         print("Failed to set linked user : $onError"));
               },
+            ),
+            Container(height: 16.0),
+            Row(
+              children: [
+                Text(
+                  "Son nom : " + _nameLinked,
+                  style:
+                      TextStyle(color: _connected ? Colors.black : Colors.grey),
+                ),
+              ],
             ),
             Expanded(child: connectionBtn()),
           ],
@@ -152,7 +202,7 @@ class _SettingsState extends State<Settings> {
           Text("Connexion "),
           IconButton(
               icon: Icon(Icons.login),
-              color: Color(CustomColors.PRIMARY),
+              color: Color(CustomColors.SECONDARY),
               onPressed: () {
                 signInWithGoogle();
               })
@@ -165,7 +215,7 @@ class _SettingsState extends State<Settings> {
           Text("Déconnexion "),
           IconButton(
               icon: Icon(Icons.logout),
-              color: Colors.red,
+              color: Colors.black,
               onPressed: () {
                 FirebaseAuth.instance.signOut();
               })
