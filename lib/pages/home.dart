@@ -24,6 +24,7 @@ class _HomeState extends State<Home> {
 
   int _lastRefresh = 0;
   int _lastNotificationShow = 0;
+  int _lastHeartSent = 0;
 
   List<HeartsADay> _chartData = [];
 
@@ -57,7 +58,20 @@ class _HomeState extends State<Home> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          sendAHeart();
+                          if (_lastHeartSent <
+                              new DateTime.now().millisecondsSinceEpoch -
+                                  3000) {
+                            sendAHeart();
+
+                            // show notification
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: const Text("❤️ envoyé !",
+                                  style: TextStyle(
+                                      fontSize: 48.0, color: Colors.white)),
+                              duration: const Duration(seconds: 2),
+                              backgroundColor: Colors.red.shade400,
+                            ));
+                          }
                         },
                         style: ButtonStyle(
                           backgroundColor:
@@ -147,7 +161,8 @@ class _HomeState extends State<Home> {
   }
 
   void sendAHeart() {
-    // TODO: prevent from sending a heart if former sent was before 1h
+    _lastHeartSent = new DateTime.now().millisecondsSinceEpoch;
+
     String userId = FirebaseAuth.instance.currentUser!.uid;
 
     DocumentReference userData =
