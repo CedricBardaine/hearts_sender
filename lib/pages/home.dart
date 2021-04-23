@@ -1,3 +1,5 @@
+// TODO: allow to delete the hearts
+//
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -79,10 +81,10 @@ class _HomeState extends State<Home> {
                             (Set<MaterialState> states) {
                               if (states.contains(MaterialState.pressed))
                                 // return Theme.of(context).colorScheme.secondary; // this way uses the defined property of ThemData of the MaterialApp()
-                                return Color(CustomColors.SECONDARY);
-                              return Theme.of(context)
-                                  .colorScheme
-                                  .primary; // Use the component's default.
+                                return Color(CustomColors.PRIMARY);
+                              else
+                                return Color(CustomColors
+                                    .SECONDARY); // Use the component's default.
                             },
                           ),
                         ),
@@ -117,7 +119,7 @@ class _HomeState extends State<Home> {
                   ),
                   IconButton(
                       icon: Icon(Icons.refresh),
-                      color: Color(CustomColors.TERTIARY),
+                      color: Colors.white,
                       onPressed: () {
                         //
                         if (_lastRefresh <
@@ -134,8 +136,7 @@ class _HomeState extends State<Home> {
                           // show notification
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: const Text("Doucement.",
-                                style: TextStyle(
-                                    color: Color(CustomColors.TERTIARY))),
+                                style: TextStyle(color: Colors.white)),
                             duration: const Duration(seconds: 3),
                             backgroundColor: Color(CustomColors.SECONDARY),
                           ));
@@ -154,7 +155,7 @@ class _HomeState extends State<Home> {
         tooltip: "Mes paramètres",
         child: Icon(
           Icons.settings,
-          color: Color(CustomColors.TERTIARY),
+          color: Colors.white,
         ),
       ),
     );

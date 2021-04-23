@@ -1,5 +1,3 @@
-// TODO: change colors in this application :)
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hearts_sender/colors.dart';
@@ -36,20 +34,6 @@ class MyApp extends StatelessWidget {
                 // Notice that the counter didn't reset back to zero; the application
                 // is not restarted.
 
-                // 0xFF669C5E
-                primarySwatch:
-                    const MaterialColor(0xFF669C5E, const <int, Color>{
-                  50: const Color(0xFF669C5E),
-                  100: const Color(0xFF669C5E),
-                  200: const Color(0xFF669C5E),
-                  300: const Color(0xFF669C5E),
-                  400: const Color(0xFF669C5E),
-                  500: const Color(0xFF669C5E),
-                  600: const Color(0xFF669C5E),
-                  700: const Color(0xFF669C5E),
-                  800: const Color(0xFF669C5E),
-                  900: const Color(0xFF669C5E),
-                }),
                 primaryColor: Color(CustomColors.PRIMARY),
                 accentColor: Color(CustomColors.SECONDARY),
 
@@ -59,6 +43,7 @@ class MyApp extends StatelessWidget {
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
               home: Home(),
+              debugShowCheckedModeBanner: false,
             );
 
           return Loading();

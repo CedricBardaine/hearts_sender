@@ -99,8 +99,7 @@ class _SettingsState extends State<Settings> {
                         // And show notification
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: const Text("Identifiant copié.",
-                              style: TextStyle(
-                                  color: Color(CustomColors.TERTIARY))),
+                              style: TextStyle(color: Colors.white)),
                           duration: const Duration(seconds: 3),
                           backgroundColor: Color(CustomColors.SECONDARY),
                         ));
