@@ -34,6 +34,7 @@ class _HomeState extends State<Home> {
           _connected = false;
         else
           _connected = true;
+        getHearts();
       });
     });
 
