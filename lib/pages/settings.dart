@@ -7,7 +7,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hearts_sender/add_user.dart';
 
 import 'package:hearts_sender/colors.dart';
 
@@ -139,7 +138,6 @@ class _SettingsState extends State<Settings> {
               },
             ),
             Expanded(child: connectionBtn()),
-            AddUser("fullName", "company", 21),
           ],
         ),
       ),
