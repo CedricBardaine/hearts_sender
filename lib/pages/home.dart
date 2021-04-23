@@ -22,6 +22,9 @@ class _HomeState extends State<Home> {
   int _nbHeartsThisWeek = 0;
   int _nbHeartsThisDay = 0;
 
+  int _lastRefresh = 0;
+  int _lastNotificationShow = 0;
+
   List<HeartsADay> _chartData = [];
 
   @override
@@ -98,6 +101,33 @@ class _HomeState extends State<Home> {
                   SubscriberChart(
                     data: _chartData,
                   ),
+                  IconButton(
+                      icon: Icon(Icons.refresh),
+                      color: Color(CustomColors.TERTIARY),
+                      onPressed: () {
+                        //
+                        if (_lastRefresh <
+                            new DateTime.now().millisecondsSinceEpoch - 3000)
+                          setState(() {
+                            getHearts();
+                          });
+                        //
+                        else if (_lastNotificationShow <
+                            new DateTime.now().millisecondsSinceEpoch - 3000) {
+                          _lastNotificationShow =
+                              new DateTime.now().millisecondsSinceEpoch;
+
+                          // show notification
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: const Text("Doucement.",
+                                style: TextStyle(
+                                    color: Color(CustomColors.TERTIARY))),
+                            duration: const Duration(seconds: 3),
+                            backgroundColor: Color(CustomColors.SECONDARY),
+                          ));
+                        }
+                        //
+                      })
                 ],
               )
             : Center(child: Text("Connectez vous avant tout 😁")),
@@ -129,6 +159,7 @@ class _HomeState extends State<Home> {
   }
 
   void getHearts() {
+    _lastRefresh = new DateTime.now().millisecondsSinceEpoch;
     DateTime aWeekAgo = new DateTime.now().subtract(new Duration(days: 7));
 
     /// Current week day number.
