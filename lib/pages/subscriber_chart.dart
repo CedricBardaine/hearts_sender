@@ -5,19 +5,19 @@ import '../subscriber_series.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class SubscriberChart extends StatelessWidget {
-  final List<SubscriberSeries> data;
+  final List<HeartsADay> data;
 
   SubscriberChart({required this.data});
 
   @override
   Widget build(BuildContext context) {
-    List<charts.Series<SubscriberSeries, String>> series = [
+    List<charts.Series<HeartsADay, String>> series = [
       charts.Series(
           id: "Subscribers",
           data: data,
-          domainFn: (SubscriberSeries series, _) => series.year,
-          measureFn: (SubscriberSeries series, _) => series.subscribers,
-          colorFn: (SubscriberSeries series, _) => series.barColor)
+          domainFn: (HeartsADay series, _) => series.day,
+          measureFn: (HeartsADay series, _) => series.hearts,
+          colorFn: (HeartsADay series, _) => series.barColor)
     ];
 
     return Container(
@@ -29,8 +29,7 @@ class SubscriberChart extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                "World of Warcraft Subscribers by Year",
-                style: Theme.of(context).textTheme.body2,
+                "❤️ chart of the week",
               ),
               Expanded(
                 child: charts.BarChart(series, animate: true),
