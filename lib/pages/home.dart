@@ -119,7 +119,8 @@ class _HomeState extends State<Home> {
                   ),
                   IconButton(
                       icon: Icon(Icons.refresh),
-                      color: Colors.white,
+                      color: Colors.red,
+                      iconSize: 32.0,
                       onPressed: () {
                         //
                         if (_lastRefresh <
