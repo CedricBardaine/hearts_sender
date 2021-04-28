@@ -1,0 +1,25 @@
+{
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            80
+        ],
+        "editor.selectionHighlight": false,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": false
+    },
+    // @see https://code.visualstudio.com/api/references/theme-color 
+    "workbench.colorCustomizations": {
+        /*
+            red :           #F44336
+            red accent :    #FF5252
+        */
+        "activityBar.foreground": "#FF5252",
+        "statusBar.background": "#FF5252",
+        "statusBar.debuggingBackground": "#F44336",
+        "badge.background": "#FF5252",
+    }
+}
