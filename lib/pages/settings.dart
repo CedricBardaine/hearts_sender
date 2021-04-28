@@ -240,7 +240,7 @@ class _SettingsState extends State<Settings> {
           IconButton(
               icon: Icon(
                 Icons.delete_forever,
-                size: 48.0,
+                size: 40.0,
               ),
               color: Color(CustomColors.SECONDARY),
               onPressed: () {
