@@ -215,7 +215,7 @@ class _SettingsState extends State<Settings> {
         ],
       );
     else
-      return Row(
+      return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("Déconnexion "),
