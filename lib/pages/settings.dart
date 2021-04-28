@@ -244,26 +244,72 @@ class _SettingsState extends State<Settings> {
               ),
               color: Color(CustomColors.SECONDARY),
               onPressed: () {
-                DocumentReference linkedUserData =
-                    FirebaseFirestore.instance.collection('User').doc(_userId);
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("⚠️"),
+                        content: Text(
+                            "Es-tu vraiment sûr(e) de supprimer tous les ♥️ envoyés ?"),
+                        actions: [
+                          // CANCEL
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(
+                              "NON",
+                              style: TextStyle(
+                                  color: Color(CustomColors.SECONDARY)),
+                            ),
+                          ),
 
-                CollectionReference linkedUserHearts =
-                    linkedUserData.collection('hearts');
+                          // VALIDATE
+                          TextButton(
+                            onPressed: () {
+                              DocumentReference linkedUserData =
+                                  FirebaseFirestore.instance
+                                      .collection('User')
+                                      .doc(_userId);
 
-                linkedUserHearts.get().then((QuerySnapshot querySapsh) {
-                  querySapsh.docs.forEach((element) {
-                    print(element["date"].toString() + " is being deleted");
-                    element.reference.delete();
-                  });
-                });
-                /*
-                  firestore.collection('messages').getDocuments().then((snapshot) {
-                    for (DocumentSnapshot doc in snapshot.documents) {
-                      doc.reference.delete();
+                              CollectionReference linkedUserHearts =
+                                  linkedUserData.collection('hearts');
+
+                              linkedUserHearts
+                                  .get()
+                                  .then((QuerySnapshot querySapsh) {
+                                querySapsh.docs.forEach((element) {
+                                  print(element["date"].toString() +
+                                      " is being deleted");
+                                  element.reference.delete();
+                                });
+                              }).then((value) => Navigator.pop(context));
+                            },
+                            child: Text(
+                              "SÛR(E) !",
+                              style:
+                                  TextStyle(color: Color(CustomColors.PRIMARY)),
+                            ),
+                          )
+                        ],
+                      );
                     });
-                  });
-                  */
-              })
+              }
+
+              // {
+              //   DocumentReference linkedUserData =
+              //       FirebaseFirestore.instance.collection('User').doc(_userId);
+
+              //   CollectionReference linkedUserHearts =
+              //       linkedUserData.collection('hearts');
+
+              //   linkedUserHearts.get().then((QuerySnapshot querySapsh) {
+              //     querySapsh.docs.forEach((element) {
+              //       print(element["date"].toString() + " is being deleted");
+              //       element.reference.delete();
+              //     });
+              //   });
+              // }
+
+              )
         ],
       );
     else
