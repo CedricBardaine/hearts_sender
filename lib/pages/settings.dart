@@ -188,6 +188,12 @@ class _SettingsState extends State<Settings> {
               ],
             ),
             Expanded(child: connectionBtn()),
+            Container(
+              height: 16.0,
+            ),
+            Expanded(
+              child: deleteAllHeartsBtn(),
+            )
           ],
         ),
       ),
@@ -219,6 +225,55 @@ class _SettingsState extends State<Settings> {
               onPressed: () {
                 FirebaseAuth.instance.signOut();
               })
+        ],
+      );
+  }
+
+  Widget deleteAllHeartsBtn() {
+    if (_connected)
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Supprimer tous mes ❤️ envoyés",
+          ),
+          IconButton(
+              icon: Icon(
+                Icons.delete_forever,
+                size: 48.0,
+              ),
+              color: Color(CustomColors.SECONDARY),
+              onPressed: () {
+                DocumentReference linkedUserData =
+                    FirebaseFirestore.instance.collection('User').doc(_userId);
+
+                CollectionReference linkedUserHearts =
+                    linkedUserData.collection('hearts');
+
+                linkedUserHearts.get().then((QuerySnapshot querySapsh) {
+                  querySapsh.docs.forEach((element) {
+                    print(element["date"].toString() + " is being deleted");
+                    element.reference.delete();
+                  });
+                });
+                /*
+                  firestore.collection('messages').getDocuments().then((snapshot) {
+                    for (DocumentSnapshot doc in snapshot.documents) {
+                      doc.reference.delete();
+                    });
+                  });
+                  */
+              })
+        ],
+      );
+    else
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "...",
+            style: TextStyle(fontSize: 32.0),
+          ),
         ],
       );
   }
