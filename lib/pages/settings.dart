@@ -188,6 +188,12 @@ class _SettingsState extends State<Settings> {
               ],
             ),
             Expanded(child: connectionBtn()),
+            Container(
+              height: 16.0,
+            ),
+            Expanded(
+              child: deleteAllHeartsBtn(),
+            )
           ],
         ),
       ),
@@ -209,7 +215,7 @@ class _SettingsState extends State<Settings> {
         ],
       );
     else
-      return Row(
+      return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("Déconnexion "),
@@ -219,6 +225,101 @@ class _SettingsState extends State<Settings> {
               onPressed: () {
                 FirebaseAuth.instance.signOut();
               })
+        ],
+      );
+  }
+
+  Widget deleteAllHeartsBtn() {
+    if (_connected)
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Supprimer tous mes ❤️ envoyés",
+          ),
+          IconButton(
+              icon: Icon(
+                Icons.delete_forever,
+                size: 40.0,
+              ),
+              color: Color(CustomColors.SECONDARY),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("⚠️"),
+                        content: Text(
+                            "Es-tu vraiment sûr(e) de supprimer tous les ♥️ envoyés ?"),
+                        actions: [
+                          // CANCEL
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(
+                              "NON",
+                              style: TextStyle(
+                                  color: Color(CustomColors.SECONDARY)),
+                            ),
+                          ),
+
+                          // VALIDATE
+                          TextButton(
+                            onPressed: () {
+                              DocumentReference linkedUserData =
+                                  FirebaseFirestore.instance
+                                      .collection('User')
+                                      .doc(_userId);
+
+                              CollectionReference linkedUserHearts =
+                                  linkedUserData.collection('hearts');
+
+                              linkedUserHearts
+                                  .get()
+                                  .then((QuerySnapshot querySapsh) {
+                                querySapsh.docs.forEach((element) {
+                                  print(element["date"].toString() +
+                                      " is being deleted");
+                                  element.reference.delete();
+                                });
+                              }).then((value) => Navigator.pop(context));
+                            },
+                            child: Text(
+                              "SÛR(E) !",
+                              style:
+                                  TextStyle(color: Color(CustomColors.PRIMARY)),
+                            ),
+                          )
+                        ],
+                      );
+                    });
+              }
+
+              // {
+              //   DocumentReference linkedUserData =
+              //       FirebaseFirestore.instance.collection('User').doc(_userId);
+
+              //   CollectionReference linkedUserHearts =
+              //       linkedUserData.collection('hearts');
+
+              //   linkedUserHearts.get().then((QuerySnapshot querySapsh) {
+              //     querySapsh.docs.forEach((element) {
+              //       print(element["date"].toString() + " is being deleted");
+              //       element.reference.delete();
+              //     });
+              //   });
+              // }
+
+              )
+        ],
+      );
+    else
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "...",
+            style: TextStyle(fontSize: 32.0),
+          ),
         ],
       );
   }
