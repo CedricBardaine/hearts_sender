@@ -13,11 +13,13 @@ class SubscriberChart extends StatelessWidget {
   Widget build(BuildContext context) {
     List<charts.Series<HeartsADay, String>> series = [
       charts.Series(
-          id: "Subscribers",
-          data: data,
-          domainFn: (HeartsADay series, _) => series.day,
-          measureFn: (HeartsADay series, _) => series.hearts,
-          colorFn: (HeartsADay series, _) => series.barColor)
+        id: "Subscribers",
+        data: data,
+        domainFn: (HeartsADay series, _) => series.day,
+        measureFn: (HeartsADay series, _) => series.hearts,
+        colorFn: (HeartsADay series, _) => series.barColor,
+        labelAccessorFn: (HeartsADay series, _) => series.hearts.toString(),
+      )
     ];
 
     return Container(
@@ -32,7 +34,11 @@ class SubscriberChart extends StatelessWidget {
                 "❤️ chart of the week",
               ),
               Expanded(
-                child: charts.BarChart(series, animate: true),
+                child: charts.BarChart(
+                  series,
+                  animate: true,
+                  barRendererDecorator: new charts.BarLabelDecorator<String>(),
+                ),
               )
             ],
           ),
