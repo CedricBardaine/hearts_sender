@@ -24,6 +24,8 @@ class _HomeState extends State<Home> {
   int _nbHeartsThisWeek = 0;
   int _nbHeartsThisDay = 0;
 
+  int _nbHeartsSentThisDay = 0;
+
   int _lastRefresh = 0;
   int _lastNotificationShow = 0;
   int _lastHeartSent = 0;
@@ -93,9 +95,13 @@ class _HomeState extends State<Home> {
                       )
                     ],
                   ),
+                  Text("Nombre de ❤ envoyés aujourd'hui : " +
+                      _nbHeartsSentThisDay.toString()),
+
                   Container(
                     height: 32.0,
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [Text("My hearts")],
@@ -175,6 +181,19 @@ class _HomeState extends State<Home> {
         {"color": "green", "date": new DateTime.now().millisecondsSinceEpoch});
   }
 
+  void getSentHearts() {
+    DateTime aDayAgo = new DateTime.now().subtract(new Duration(days: 1));
+
+    FirebaseFirestore.instance
+        .collection('User')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('hearts')
+        .where('date', isGreaterThan: aDayAgo.millisecondsSinceEpoch)
+        .get()
+        .then((QuerySnapshot querySnapshot) =>
+            _nbHeartsSentThisDay = querySnapshot.docs.length);
+  }
+
   void getHearts() {
     _lastRefresh = new DateTime.now().millisecondsSinceEpoch;
     DateTime aWeekAgo = new DateTime.now().subtract(new Duration(days: 7));
@@ -188,6 +207,10 @@ class _HomeState extends State<Home> {
 
     DocumentReference userData =
         FirebaseFirestore.instance.collection('User').doc(userId);
+
+    //
+    // Feth user's sent hearts.
+    getSentHearts();
 
     //
     // Fetch user's linked user.
