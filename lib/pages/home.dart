@@ -181,6 +181,10 @@ class _HomeState extends State<Home> {
         {"color": "green", "date": new DateTime.now().millisecondsSinceEpoch});
   }
 
+  /// Re-inits and increments _nbHeartsSentThisDay.
+  ///
+  /// Fetches the hearts sent by the current user since the last 24h,
+  /// and checks if each correponds to the current day.
   void getSentHearts() {
     DateTime aDayAgo = new DateTime.now().subtract(new Duration(days: 1));
 
@@ -190,8 +194,14 @@ class _HomeState extends State<Home> {
         .collection('hearts')
         .where('date', isGreaterThan: aDayAgo.millisecondsSinceEpoch)
         .get()
-        .then((QuerySnapshot querySnapshot) =>
-            _nbHeartsSentThisDay = querySnapshot.docs.length);
+        .then((QuerySnapshot querySnapshot) {
+      _nbHeartsSentThisDay = 0;
+
+      querySnapshot.docs.forEach((doc) {
+        if (DateTime.fromMillisecondsSinceEpoch(doc['date']).weekday ==
+            DateTime.now().weekday) _nbHeartsSentThisDay++;
+      });
+    });
   }
 
   void getHearts() {
